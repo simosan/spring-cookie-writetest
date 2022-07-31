@@ -1,0 +1,13 @@
+package dev.sim.cokitest;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+@SpringBootApplication
+public class SpringSimcookietestApplication {
+
+	public static void main(String[] args) {
+		SpringApplication.run(SpringSimcookietestApplication.class, args);
+	}
+
+}
