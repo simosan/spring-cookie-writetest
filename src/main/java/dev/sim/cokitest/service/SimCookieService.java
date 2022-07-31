@@ -12,12 +12,12 @@ import dev.sim.cokitest.repository.SimCookieMapper;
 @Transactional
 @Service
 public class SimCookieService {
-	
-	 private final SimCookieMapper mapper;
-	
-	 public List<Dep> selectUid(String uid) {
-		 List<Dep> deps = mapper.selectUid(uid);
-		 return deps;
-	 }
+
+	private final SimCookieMapper mapper;
+
+	public List<Dep> selectUid(String uid) {
+		List<Dep> deps = mapper.selectUid(uid);
+		return deps;
+	}
 
 }

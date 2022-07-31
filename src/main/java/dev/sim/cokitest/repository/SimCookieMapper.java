@@ -7,7 +7,7 @@ import dev.sim.cokitest.model.*;
 
 @Mapper
 public interface SimCookieMapper {
-	
-    public List<Dep> selectUid(String uid);
-    
+
+	public List<Dep> selectUid(String uid);
+
 }

@@ -7,6 +7,8 @@ bk/
 mvnw
 mvnw.cmd
 sqlite3/sqlite-jdbc/
+sqlite3/dep.csv
+sqlite3/role.csv
 !.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
 !**/src/test/**/target/

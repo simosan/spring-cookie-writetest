@@ -8,11 +8,13 @@ import lombok.Data;
 @Data
 public class Role {
 
-    /*@NotBlank
-    @Size(max = 10)
-	private String uid;*/
-    
-    @NotBlank
-    @Size(max = 10)
-    private String rolename;
+	/*
+	 * @NotBlank
+	 * 
+	 * @Size(max = 10) private String uid;
+	 */
+
+	@NotBlank
+	@Size(max = 10)
+	private String rolename;
 }

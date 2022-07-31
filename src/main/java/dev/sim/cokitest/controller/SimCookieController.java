@@ -12,24 +12,21 @@ import dev.sim.cokitest.service.SimWriteCookie;
 import dev.sim.cokitest.service.SimWriteCookieUtf8Impl;
 import lombok.RequiredArgsConstructor;
 
-
 @RequiredArgsConstructor
 @RestController
 public class SimCookieController {
-	
+
 	@Autowired
 	private final SimCookieService service;
-	
-    @GetMapping("/roles")
-    public List<Dep> getRoles(@RequestParam("uid") String uid, 
-    		                                       HttpServletResponse response)
-    {
-    	// DBからユーザIDに紐づいた情報を取得する
-        List<Dep> uWithRolelist = service.selectUid(uid);
-        // HTTP responseを介してCookieに対して、uWithRolelist（Role情報）を書き込む
-        //// UTF-8版
-        SimWriteCookie swc = new SimWriteCookieUtf8Impl();
-        swc.writeCookie(response, uWithRolelist);
-        return uWithRolelist;
-    }
+
+	@GetMapping("/roles")
+	public List<Dep> getRoles(@RequestParam("uid") String uid, HttpServletResponse response) {
+		// DBからユーザIDに紐づいた情報を取得する
+		List<Dep> uWithRolelist = service.selectUid(uid);
+		// HTTP responseを介してCookieに対して、uWithRolelist（Role情報）を書き込む
+		//// UTF-8版
+		SimWriteCookie swc = new SimWriteCookieUtf8Impl();
+		swc.writeCookie(response, uWithRolelist);
+		return uWithRolelist;
+	}
 }

@@ -9,14 +9,14 @@ import lombok.Data;
 
 @Data
 public class Dep {
-    @NotBlank
-    @Size(max = 10)
+	@NotBlank
+	@Size(max = 10)
 	private String uid;
-    
-    @NotBlank
-    @Size(max = 20)
-    private String department;
-    
-    //子クラス（role）（1対多）
-    private List<Role> rolelist;
+
+	@NotBlank
+	@Size(max = 20)
+	private String department;
+
+	// 子クラス（role）（1対多）
+	private List<Role> rolelist;
 }
