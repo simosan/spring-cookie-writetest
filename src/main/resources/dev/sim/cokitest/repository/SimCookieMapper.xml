@@ -14,7 +14,6 @@
 		     <result column="rolename" property="rolename" />
 	     </collection>
      </resultMap>
-     
      <!-- ユーザIDをもとに部署と紐づく複数ロール取得 -->
      <select id="selectUid" resultMap="DepMap">
           select 
@@ -26,5 +25,15 @@
            on d.uid = r.uid
           where 
            d.uid = #{uid,jdbcType=VARCHAR}
+     </select>
+     
+     <!-- role名をもとにリダイレクト先のURLを取得 -->
+     <select id="selectRedirectUrl" resultType="String">
+          select 
+             redirecturl
+          from role
+          where 
+           rolename = #{rolename,jdbcType=VARCHAR}
+          group by redirecturl
      </select>
 </mapper>

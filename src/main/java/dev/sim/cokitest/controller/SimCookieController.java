@@ -1,15 +1,16 @@
 package dev.sim.cokitest.controller;
 
+import java.io.IOException;
+import java.security.Principal;
 import java.util.List;
 import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import dev.sim.cokitest.model.Dep;
-import dev.sim.cokitest.service.SimCookieService;
-import dev.sim.cokitest.service.SimWriteCookie;
-import dev.sim.cokitest.service.SimWriteCookieUtf8Impl;
+import dev.sim.cokitest.service.*;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
@@ -17,16 +18,32 @@ import lombok.RequiredArgsConstructor;
 public class SimCookieController {
 
 	@Autowired
-	private final SimCookieService service;
+	private final SimDepAndRoleFromDb dbservice;
 
-	@GetMapping("/roles")
-	public List<Dep> getRoles(@RequestParam("uid") String uid, HttpServletResponse response) {
+	@RequestMapping("/{role}")
+	public void redirectWithCookieAndHeader(@PathVariable("role") String role,
+			                            HttpServletResponse response,
+			                            Principal principal,
+			                            OAuth2AuthenticationToken authentication) {
+		// Okta認証、Oktaからattributesに設定されたid（OktaのBase属性のnickname）を取得する
+		SimOktaAttributeService oktaattrservice = new SimOktaAttributeServiceUtf8();
+		SimOktaAuthAndAttributes oktaattrbutes = new SimOktaAuthAndAttributes(oktaattrservice);
+		String uid = oktaattrbutes.getOktauid(response, authentication);
+
 		// DBからユーザIDに紐づいた情報を取得する
-		List<Dep> uWithRolelist = service.selectUid(uid);
+		List<Dep> uWithRolelist = dbservice.selectUid(uid);
 		// HTTP responseを介してCookieに対して、uWithRolelist（Role情報）を書き込む
 		//// UTF-8版
 		SimWriteCookie swc = new SimWriteCookieUtf8Impl();
 		swc.writeCookie(response, uWithRolelist);
-		return uWithRolelist;
+		
+		// DBからroleに紐づいたRedirectURLを取得する
+        String url = dbservice.selectRedirectUrl(role);
+		// リダイレクト先のURLに繊維
+		try {
+			response.sendRedirect(url);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 }

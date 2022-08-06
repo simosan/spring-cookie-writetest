@@ -9,5 +9,7 @@ import dev.sim.cokitest.model.*;
 public interface SimCookieMapper {
 
 	public List<Dep> selectUid(String uid);
+	
+	public String selectRedirectUrl(String role);
 
 }

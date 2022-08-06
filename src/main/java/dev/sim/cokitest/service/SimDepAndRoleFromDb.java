@@ -11,13 +11,18 @@ import dev.sim.cokitest.repository.SimCookieMapper;
 @RequiredArgsConstructor
 @Transactional
 @Service
-public class SimCookieService {
+public class SimDepAndRoleFromDb {
 
 	private final SimCookieMapper mapper;
 
 	public List<Dep> selectUid(String uid) {
 		List<Dep> deps = mapper.selectUid(uid);
 		return deps;
+	}
+	
+	public String selectRedirectUrl(String role) {
+		String url = mapper.selectRedirectUrl(role);
+		return url;
 	}
 
 }
