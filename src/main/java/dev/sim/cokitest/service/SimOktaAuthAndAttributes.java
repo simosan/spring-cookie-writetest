@@ -1,6 +1,5 @@
 package dev.sim.cokitest.service;
 
-import javax.servlet.http.HttpServletResponse;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.stereotype.Service;
 import java.util.Map;
@@ -14,7 +13,7 @@ public class SimOktaAuthAndAttributes {
 		this.oktaattr = oktaattr;
 	}
 
-	public String getOktauid(HttpServletResponse res, OAuth2AuthenticationToken auth) {
+	public String getOktauid(OAuth2AuthenticationToken auth) {
 
 		Map<String,Object> m = auth.getPrincipal().getAttributes();
 		String uid = oktaattr.getuid(m);

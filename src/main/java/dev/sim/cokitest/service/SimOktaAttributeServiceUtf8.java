@@ -9,7 +9,7 @@ public class SimOktaAttributeServiceUtf8 implements SimOktaAttributeService{
 	public String getuid(Map<String,Object> mapper) {
 		String uid = null;
 		for(Map.Entry<String, Object> entry : mapper.entrySet()) {
-			if(entry.getKey().equals("nickname")) {
+			if(entry.getKey().equals("empid")) {
 				uid = entry.getValue().toString();
 				break;
 			}
