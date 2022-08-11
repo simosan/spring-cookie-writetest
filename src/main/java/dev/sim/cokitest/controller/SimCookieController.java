@@ -4,10 +4,10 @@ import java.io.IOException;
 import java.security.Principal;
 import java.util.List;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import dev.sim.cokitest.model.Dep;
@@ -21,16 +21,14 @@ public class SimCookieController {
 	@Autowired
 	private final SimDepAndRoleFromDb dbservice;
 	@Autowired
-	private final SimGetCookie cookie;
+	private final SimWriteHeader swh;
 	
-	@RequestMapping("/")
-	public void redirectWithCookieAndHeader(HttpServletRequest request,
-			                                HttpServletResponse response,
-			                                Principal principal,
-			                                OAuth2AuthenticationToken authentication) {
-		// 手前のHTTPサーバで仕込んだCookie（AKROLE-PARAMETER)からROLE情報を取得する
-		String role = cookie.getCookie(request);
-		
+	@RequestMapping("/{role}")
+	public void redirectWithCookieAndHeader(@PathVariable("role") String role,
+                                            HttpServletResponse response,
+                                            Principal principal,
+                                            OAuth2AuthenticationToken authentication) {
+
 		// Okta認証、Oktaからattributesに設定されたid（Oktaのカスタム属性employeeid）を取得する
 		SimOktaAttributeService oktaattrservice = new SimOktaAttributeServiceUtf8();
 		SimOktaAuthAndAttributes oktaattrbutes = new SimOktaAuthAndAttributes(oktaattrservice);
@@ -38,6 +36,7 @@ public class SimCookieController {
 
 		// DBからユーザIDに紐づいた情報を取得する
 		List<Dep> uWithRolelist = dbservice.selectUid(uid);
+		
 		// HTTP responseを介してCookieに対して、uWithRolelist（Role情報）を書き込む
 		//// UTF-8版
 		SimWriteCookie swcutf8 = new SimWriteCookieUtf8Impl();
@@ -45,6 +44,9 @@ public class SimCookieController {
 		//// SJIS版
 		SimWriteCookie swcsjis = new SimWriteCookieSJISImpl();
 		swcsjis.writeCookie(response, uWithRolelist);
+		
+		// HTTP responseを介して拡張ヘッダに対して、uWithRolelist（Role情報）を書き込む
+		swh.writeHeader(response, uWithRolelist);
 		
 		// DBからroleに紐づいたRedirectURLを取得する
 		String url = dbservice.selectRedirectUrl(role);

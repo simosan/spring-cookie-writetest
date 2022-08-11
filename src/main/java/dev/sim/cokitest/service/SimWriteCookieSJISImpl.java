@@ -3,9 +3,8 @@ package dev.sim.cokitest.service;
 import java.io.UnsupportedEncodingException;
 import java.util.Base64;
 import java.util.List;
-
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
+import org.springframework.http.ResponseCookie;
 import dev.sim.cokitest.model.Dep;
 import dev.sim.cokitest.model.Role;
 
@@ -41,12 +40,18 @@ public class SimWriteCookieSJISImpl implements SimWriteCookie {
 		
 		// ROLEリスト文字列をbase64に変換
 		chgcookiestr = Base64.getEncoder().encodeToString(chgcookiestr.getBytes());
-
+		
 		// Cookie生成
-		Cookie cookie = new Cookie("USER_INFO", chgcookiestr);
-		// Cookieの残存期間（秒数）-> 3時間
-		cookie.setMaxAge(3 * 60 * 60);
+		/// Cookie生存時間は2時間
+		/// セキュア属性は無効化（HTTPサイトでもCookieがわたるようにする）
+		/// Samesite（同一ドメイン名）制限は少しゆるめ（CSRF攻撃には対応できる）
+		ResponseCookie cookie = ResponseCookie.from("USER_INFO", chgcookiestr)
+				.httpOnly(true)
+				.maxAge(2 * 60 * 60)
+				.secure(false)
+				.sameSite("Lax")
+				.build();
 		// Cookie追加
-		res.addCookie(cookie);
+		res.addHeader("Set-Cookie", cookie.toString());
 	}
 }
