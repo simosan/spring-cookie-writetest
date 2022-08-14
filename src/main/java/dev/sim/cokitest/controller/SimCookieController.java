@@ -21,7 +21,7 @@ public class SimCookieController {
 	@Autowired
 	private final SimDepAndRoleFromDb dbservice;
 	@Autowired
-	private final SimWriteHeader swh;
+	private final SImWriteRoleParamCookie swrpc;
 	
 	@RequestMapping("/{role}")
 	public void redirectWithCookieAndHeader(@PathVariable("role") String role,
@@ -45,8 +45,8 @@ public class SimCookieController {
 		SimWriteCookie swcsjis = new SimWriteCookieSJISImpl();
 		swcsjis.writeCookie(response, uWithRolelist);
 		
-		// HTTP responseを介して拡張ヘッダに対して、uWithRolelist（Role情報）を書き込む
-		swh.writeHeader(response, uWithRolelist);
+		// HTTP requestを介して拡張ヘッダに対して、指定ROLE名を書き込む
+		swrpc.writeCookie(response, role);
 		
 		// DBからroleに紐づいたRedirectURLを取得する
 		String url = dbservice.selectRedirectUrl(role);
