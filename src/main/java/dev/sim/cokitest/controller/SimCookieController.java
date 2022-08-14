@@ -45,7 +45,7 @@ public class SimCookieController {
 		SimWriteCookie swcsjis = new SimWriteCookieSJISImpl();
 		swcsjis.writeCookie(response, uWithRolelist);
 		
-		// HTTP requestを介して拡張ヘッダに対して、指定ROLE名を書き込む
+		// HTTP requestを介してCookieに対して、指定ROLE名を書き込む。この値はリバースプロキシで使用する。
 		swrpc.writeCookie(response, role);
 		
 		// DBからroleに紐づいたRedirectURLを取得する
