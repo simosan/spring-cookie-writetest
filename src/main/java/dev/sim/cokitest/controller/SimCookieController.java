@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.security.Principal;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
@@ -25,6 +26,7 @@ public class SimCookieController {
 	
 	@RequestMapping("/{role}")
 	public void redirectWithCookieAndHeader(@PathVariable("role") String role,
+			                                HttpServletRequest request,
                                             HttpServletResponse response,
                                             Principal principal,
                                             OAuth2AuthenticationToken authentication) {
@@ -45,8 +47,8 @@ public class SimCookieController {
 		SimWriteCookie swcsjis = new SimWriteCookieSJISImpl();
 		swcsjis.writeCookie(response, uWithRolelist);
 		
-		// HTTP requestを介してCookieに対して、指定ROLE名を書き込む。この値はリバースプロキシで使用する。
-		swrpc.writeCookie(response, role);
+		// HTTP requestを介してCookieに対して、指定ROLE名やセッション情報を書きこむ。この値はリバースプロキシで使用する。
+		swrpc.writeCookie(request, response, role, uid);
 		
 		// DBからroleに紐づいたRedirectURLを取得する
 		String url = dbservice.selectRedirectUrl(role);
