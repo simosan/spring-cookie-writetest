@@ -25,11 +25,8 @@ public class SimCookieController {
 	private final SImWriteRoleParamCookie swrpc;
 	
 	@RequestMapping("/{role}")
-	public void redirectWithCookieAndHeader(@PathVariable("role") String role,
-			                                HttpServletRequest request,
-                                            HttpServletResponse response,
-                                            Principal principal,
-                                            OAuth2AuthenticationToken authentication) {
+	public void redirectWithCookieAndHeader(@PathVariable("role") String role, HttpServletRequest request,
+			HttpServletResponse response, Principal principal, OAuth2AuthenticationToken authentication) {
 
 		// Okta認証、Oktaからattributesに設定されたid（Oktaのカスタム属性employeeid）を取得する
 		SimOktaAttributeService oktaattrservice = new SimOktaAttributeServiceUtf8();

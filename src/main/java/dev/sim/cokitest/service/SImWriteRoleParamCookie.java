@@ -42,8 +42,9 @@ public class SImWriteRoleParamCookie {
 		res.addHeader("Set-Cookie", cookie2.toString());		
 		
 		//// ROLEPARAMETERにrole名を書き込む
+		//// クライアントのJavascript（document.cookie）で読み込むため、httponlyはfalseにする
 		ResponseCookie cookie3 = ResponseCookie.from("ROLEPARAMETER", role)
-				.httpOnly(true)
+				.httpOnly(false)
 				.maxAge(agetime)
 				.secure(false)
 				.sameSite(samesiteattr)
